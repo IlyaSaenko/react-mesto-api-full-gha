@@ -1,0 +1,14 @@
+.popup__name_entry {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+  .popup__name_entry {
+    max-width: 358px; 
+    margin-bottom: 0px;
+    font-size: 18px;
+    line-height: 21.78px;
+  }
+}

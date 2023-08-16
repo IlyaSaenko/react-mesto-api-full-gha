@@ -1,0 +1,27 @@
+.content {
+    max-width: 880px;
+    width: calc(100% - 2*200px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  @media screen and (max-width: 1100px) {
+    .content {
+      width: calc(100% - 2*100px);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .content {
+      width: calc(100% - 2*40px);
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .content {
+      width: calc(100% - 2*19px);
+      justify-content: center;
+    }
+  }

@@ -1,0 +1,16 @@
+.elements__item {
+    width: 282px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background-color: #fff;
+    border-radius: 10px;
+    box-sizing: border-box;
+    list-style: none;
+  }
+  
+  @media screen and (max-width: 640px) {
+  .elements__item {
+    grid-template-columns: 1fr;
+    }
+  }

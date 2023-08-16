@@ -1,0 +1,32 @@
+.elements__list {
+    margin: 0;
+    padding: 0;
+    padding-top: 47.5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    row-gap: 20px;
+    column-gap: 17px;
+  }
+  
+  @media screen and (max-width: 1024px) {
+    .elements__list {
+     margin: 0 auto;
+     grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .elements__list {
+      display: flex;
+      flex-direction: column;
+      column-gap: 0;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .elements__list {
+      padding-top: 36px;
+    }
+  }
+  

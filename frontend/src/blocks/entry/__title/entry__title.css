@@ -1,0 +1,15 @@
+.entry__title {
+	text-align: center;
+	color: rgba(255, 255, 255, 1);
+	font-size: 24px;
+	font-weight: 900;
+	line-height: 29.05px;
+}
+
+@media (max-width: 480px) {
+	.entry__title {
+		font-size: 20px;
+		font-weight: 900;
+		line-height: 24px;
+	}
+}

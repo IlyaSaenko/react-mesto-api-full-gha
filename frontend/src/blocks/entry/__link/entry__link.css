@@ -1,0 +1,11 @@
+.entry__link {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: rgba(255, 255, 255, 1);
+  text-decoration: none;
+}
+
+.entry__link:hover {
+    opacity: 0.6;
+}

@@ -1,0 +1,13 @@
+.entry {
+  width: 100%;
+  margin: 40px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media screen and (max-width: 480px) {
+  .entry {
+    margin-top: 18px;
+  }
+}

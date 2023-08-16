@@ -1,0 +1,35 @@
+/* .popup__item {
+  max-width: 358px;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 10px 0;
+  border: none;
+  box-sizing: border-box;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.2);
+  outline: none;
+}
+
+@media screen and (max-width: 480px) {
+  .popup__item {
+    max-width: 238px;
+  }
+} */
+
+.popup__item {
+  width: 100%;
+  padding: 0 0 13px 0;
+  border: none;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+@media screen and (max-width: 480px) {
+  .popup__item {
+    max-width: 238px;
+  }
+} 

@@ -1,0 +1,29 @@
+.entry__submit {
+  width: 100%;
+  height: 50px;
+  margin-top: 200px;
+  font-size: 18px;
+  line-height: 21.78px;
+  font-weight: 400;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+  color: rgba(0, 0, 0, 1);
+  border-radius: 2px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.entry__submit:hover {
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+  .entry__submit {
+    margin-top: 155px;
+    height: 46px;
+    max-width: 260px;
+    align-self: center;
+    font-size: 16px;
+    line-height: 19.36px;
+  }
+}
