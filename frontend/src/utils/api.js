@@ -15,6 +15,7 @@ class Api {
 				authorization: this._authorization,
 				"Content-Type": "application/json",
 			},
+			credentials: 'include'
 		})
 		.then(checkResponse)
 	}
@@ -26,6 +27,7 @@ class Api {
 			headers: {
 				authorization: this._authorization,
 			},
+			credentials: 'include'
 		}).then(checkResponse)
 	}
 
@@ -37,6 +39,7 @@ class Api {
 				authorization: this._authorization,
 				"Content-Type": "application/json",
 			},
+			credentials: 'include',
 			body: JSON.stringify({
 				name: data.name,
 				about: data.about,
@@ -52,6 +55,7 @@ class Api {
 				authorization: this._authorization,
 				"Content-Type": "application/json",
 			},
+			credentials: 'include',
 			body: JSON.stringify({
 				name: data.name,
 				link: data.link,
@@ -67,6 +71,7 @@ class Api {
 				headers: {
 					authorization: this._authorization,
 				},
+				credentials: 'include'
 			}).then(checkResponse)
 
 		} else {
@@ -75,6 +80,7 @@ class Api {
 				headers: {
 					authorization: this._authorization,
 				},
+				credentials: 'include'
 			}).then(checkResponse)
 		}
 	}
@@ -86,6 +92,7 @@ class Api {
 			headers: {
 				authorization: this._authorization,
 			},
+			credentials: 'include'
 		}).then(checkResponse)
 	}
 
@@ -97,6 +104,7 @@ class Api {
 				authorization: this._authorization,
 				"Content-Type": "application/json",
 			},
+			credentials: 'include',
 			body: JSON.stringify({
 				avatar: data.avatar,
 			}),

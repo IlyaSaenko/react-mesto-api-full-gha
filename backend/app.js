@@ -11,11 +11,15 @@ const helmet = require('helmet');
 const limiter = require('./middlewares/reqLimiter');
 const { createUser, login } = require('./controllers/users');
 const { URL_REGEX } = require('./utils/constants');
+// const cors = require("./middlewares/cors");
+// const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('cors');
 
 //_id: '64cb9c66d62b40265b12319d'
 
 const { PORT = 3000 } = process.env;
 const app = express();
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
@@ -24,6 +28,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(limiter);
+// app.use(requestLogger);
+
+app.use(cors({ origin: 'http://localhost:3001', credentials: true}));
+// app.use(cors);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -48,6 +56,14 @@ app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
 app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+})
+
+// app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 

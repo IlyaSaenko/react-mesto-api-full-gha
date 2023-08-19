@@ -5,7 +5,7 @@ const ForbiddenError = require('../errors/forbiddenError');
 
 const getCards = (req, res, next) => {
 	Card.find({})
-		.then((card) => res.send({ data: card }))
+		.then((card) => res.send( card ))
 		.catch(next);
 };
 
@@ -13,7 +13,7 @@ const createCard = (req, res, next) => {
 	const { name, link } = req.body;
 	Card.create({ name, link, owner: req.user._id })
 		.then((card) => {
-			res.status(201).send({ data: card });
+			res.status(201).send(card);
 		})
 		.catch((err) => {
 			if (err.name === 'ValidationError') {
@@ -34,7 +34,7 @@ const setLikeCard = (req, res, next) => {
 			if (card === null) {
 				next(new NotFoundError('Карточка не найдена'));
 			}
-			res.send({ data: card });
+			res.send(card);
 		})
 		.catch((err) => {
 			if (err.name === 'CastError') {
@@ -55,7 +55,7 @@ const removeLikeCard = (req, res, next) => {
 			if (card === null) {
 				next(new NotFoundError('Карточка не найдена'));
 			}
-			res.send({ data: card });
+			res.send(card);
 		})
 		.catch((err) => {
 			if (err.name === 'CastError') {
@@ -72,7 +72,7 @@ const deleteCard = (req, res, next) => {
 		.orFail(() => new NotFoundError('Карточка не найдена'))
 		.then((card) => {
 			if (!card.owner.equals(req.user._id)) {
-				return next(new ForbiddenError('Нет прав для удаления данной карточки'));
+				return next(new ForbiddenError('Недостаточно прав для удаления данной карточки'));
 			}
 			return card.deleteOne()
 

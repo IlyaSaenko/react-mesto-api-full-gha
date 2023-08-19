@@ -31,49 +31,62 @@ export default function App() {
   const [isSuccessRegister, setIsSuccesRegister] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
+
+
+  useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([user, card]) => {
+        setCurrentUser(user);
+        setCards(card);
+      })
+      .catch((err) =>
+        console.log(err));
+  }, []);
+
+
   // useEffect(() => {
-  //   Promise.all([api.getUserInfo(), api.getInitialCards()])
-  //     .then(([user, card]) => {
-  //       setCurrentUser(user);
-  //       setCards(card);
-  //     })
-  //     .catch((err) => console.log(err))
+  //   if (localStorage.getItem("jwt")) {
+  //     const jwt = localStorage.getItem("jwt");
+  //     auth
+  //       .checkToken(jwt)
+  //       .then((data) => {
+  //         if (data) {
+  //           setEmail(data.data.email);
+  //         }
+  //       })
+  //       .then(() => {
+  //         setLoggedIn(true);
+  //         navigate("/");
+  //       })
+  //       .catch((err) => {
+  //         setLoggedIn(false);
+  //         console.log(err);
+  //       });
+  //   }
+  //   // eslint-disable-next-line
   // }, []);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([user, card]) => {
-          setCurrentUser(user);
-          setCards(card);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [isLoggedIn]);
-
-
-  useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-      auth
-        .checkToken(jwt)
-        .then((data) => {
-          if (data) {
-            setEmail(data.data.email);
-          }
-        })
-        .then(() => {
+  const checkToken = () => {
+    auth
+      .checkUser()
+      .then((data) => {
+        if (data) {
+          setEmail(data.data.email);
           setLoggedIn(true);
-          navigate("/");
-        })
-        .catch((err) => {
+          navigate('/', { replace: true });
+        } else {
           setLoggedIn(false);
-          console.log(err);
-        });
-    }
-    // eslint-disable-next-line
+        }
+      })
+      .catch((err) => {
+        setLoggedIn(false);
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    checkToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleEditAvatarClick() {
@@ -145,18 +158,17 @@ export default function App() {
   };
 
   function isSign() {
-    localStorage.clear("jwt");
+    // localStorage.clear("jwt");
     setLoggedIn(false);
   }
 
   function onLogin(email, data) {
-    localStorage.setItem("jwt", data.token);
-    localStorage.setItem("email", email);
+    // localStorage.setItem("jwt", data.token);
+    // localStorage.setItem("email", email);
     setLoggedIn(true);
   }
 
- // обновить стэйт забыл...
- // спасибо большое за проверку и подсказки!
+  //при нажатии на кнопку
 
   function handleAuth(password, email) {
     auth
