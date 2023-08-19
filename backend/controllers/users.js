@@ -11,7 +11,7 @@ const ConflictError = require('../errors/conflictError');
 
 const getUsers = (req, res, next) => {
 	User.find({})
-		.then((users) => res.send({ data: users }))
+		.then((users) => res.send(users))
 		.catch(next);
 };
 
@@ -54,7 +54,7 @@ const getUserId = (req, res, next) => {
 			if (user === null) {
 				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
 			}
-			res.send({ data: user });
+			res.send(user);
 		})
 		.catch((err) => {
 			if (err.name === 'CastError') {
@@ -71,7 +71,7 @@ const getCurrentUserInfo = (req, res, next) => {
 			if (!data) {
 				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
 			}
-			res.send({ data });
+			res.send( data );
 		})
 		.catch((err) => {
 			if (err.name === 'CastError') {
@@ -95,7 +95,7 @@ const updateUserInfo = (req, res, next) => {
 	)
 		.then((user) => {
 			if (user) {
-				res.send({ data: user });
+				res.send(user);
 			}
 			if (!user) {
 				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
@@ -123,7 +123,7 @@ const updateAvatar = (req, res, next) => {
 	)
 		.then((user) => {
 			if (user) {
-				res.send({ data: user });
+				res.send(user);
 			}
 			if (!user) {
 				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
