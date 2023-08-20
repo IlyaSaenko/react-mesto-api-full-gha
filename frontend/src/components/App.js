@@ -25,13 +25,11 @@ export default function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = useState([]);
   const [email, setEmail] = useState("email");
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const [isSuccessRegister, setIsSuccesRegister] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-
-
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -44,49 +42,26 @@ export default function App() {
   }, []);
 
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("jwt")) {
-  //     const jwt = localStorage.getItem("jwt");
-  //     auth
-  //       .checkToken(jwt)
-  //       .then((data) => {
-  //         if (data) {
-  //           setEmail(data.data.email);
-  //         }
-  //       })
-  //       .then(() => {
-  //         setLoggedIn(true);
-  //         navigate("/");
-  //       })
-  //       .catch((err) => {
-  //         setLoggedIn(false);
-  //         console.log(err);
-  //       });
-  //   }
-  //   // eslint-disable-next-line
-  // }, []);
-
-  const checkToken = () => {
-    auth
-      .checkUser()
-      .then((data) => {
-        if (data) {
-          setEmail(data.data.email);
-          setLoggedIn(true);
-          navigate('/', { replace: true });
-        } else {
-          setLoggedIn(false);
-        }
-      })
-      .catch((err) => {
-        setLoggedIn(false);
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    checkToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      auth
+        .checkToken(jwt)
+        .then((data) => {
+          if (data) {
+            setEmail(data.email);
+          }
+        })
+        .then(() => {
+          setLoggedIn(true);
+          navigate("/");
+        })
+        .catch((err) => {
+          setLoggedIn(false);
+          console.log(err);
+        });
+    }
+    // eslint-disable-next-line
   }, []);
 
   function handleEditAvatarClick() {
@@ -114,11 +89,14 @@ export default function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+     // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      })
+    .then((newCard) => {
+      setCards((state) =>
+        state.map((c) => (c._id === card._id ? newCard : c))
+      );
+    })
       .catch((err) => console.log("Error like card " + err));
   }
 
@@ -151,20 +129,20 @@ export default function App() {
   function handleAddPlaceSubmit(value) {
     api.addNewCards(value)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([ ...cards, newCard]);
         closeAllPopups();
       })
       .catch((err) => console.log("Error add card: " + err))
   };
 
   function isSign() {
-    // localStorage.clear("jwt");
+    localStorage.clear("jwt");
     setLoggedIn(false);
   }
 
   function onLogin(email, data) {
-    // localStorage.setItem("jwt", data.token);
-    // localStorage.setItem("email", email);
+    localStorage.setItem("jwt", data.token);
+    localStorage.setItem("email", email);
     setLoggedIn(true);
   }
 
@@ -210,7 +188,7 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header email={email} loggedIn={isLoggedIn} isSign={isSign} />
+        <Header email={email} loggedIn={loggedIn} isSign={isSign} />
         <Routes>
           <Route
             path="/signup"
@@ -238,7 +216,7 @@ export default function App() {
             element={
               <ProtectedRoute
                 element={Main}
-                loggedIn={isLoggedIn}
+                loggedIn={loggedIn}
                 onEditAvatar={handleEditAvatarClick}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
@@ -263,7 +241,7 @@ export default function App() {
           />
         </Routes>
         {/* <Footer /> */}
-        {isLoggedIn && <Footer />}
+        {loggedIn && <Footer />}
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}

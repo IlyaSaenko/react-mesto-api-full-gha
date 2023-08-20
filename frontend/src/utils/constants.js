@@ -27,8 +27,8 @@ export const initialCards = [
 
 export const apiConfig = {
   url: 'http://localhost:3000',
-  headers:{
-    authorization: 'cee8554c-6d1f-4db9-968b-a545ca4ff2da',
-    'Content-Type': 'application/json'
-  }
+  // headers:{
+  //   authorization: 'cee8554c-6d1f-4db9-968b-a545ca4ff2da',
+  //   'Content-Type': 'application/json'
+  // }
 }

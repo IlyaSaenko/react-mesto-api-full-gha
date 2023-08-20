@@ -15,6 +15,40 @@ const getUsers = (req, res, next) => {
 		.catch(next);
 };
 
+const getCurrentUserInfo = (req, res, next) => {
+	User.findById(req.user._id)
+		.then((data) => {
+			if (!data) {
+				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
+			}
+			res.send(data);
+		})
+		.catch((err) => {
+			if (err.name === 'CastError') {
+				next(new BadRequestError('Передан некорректный id пользователя'));
+			} else {
+				next(err);
+			}
+		});
+};
+
+const getUserId = (req, res, next) => {
+	User.findById(req.params.userId)
+		.then((user) => {
+			if (user === null) {
+				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
+			}
+			res.send(user);
+		})
+		.catch((err) => {
+			if (err.name === 'CastError') {
+				next(new BadRequestError('Передан некорректный id пользователя'));
+			} else {
+				next(err);
+			}
+		});
+};
+
 const createUser = (req, res, next) => {
 	const {
 		name, about, avatar, email, password,
@@ -42,40 +76,6 @@ const createUser = (req, res, next) => {
 			}
 			if (err.code === 11000) {
 				next(new ConflictError('Пользователь с указанным электронным адресом уже зарегистрирован'));
-			} else {
-				next(err);
-			}
-		});
-};
-
-const getUserId = (req, res, next) => {
-	User.findById(req.params.userId)
-		.then((user) => {
-			if (user === null) {
-				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
-			}
-			res.send(user);
-		})
-		.catch((err) => {
-			if (err.name === 'CastError') {
-				next(new BadRequestError('Передан некорректный id пользователя'));
-			} else {
-				next(err);
-			}
-		});
-};
-
-const getCurrentUserInfo = (req, res, next) => {
-	User.findById(req.user._id)
-		.then((data) => {
-			if (!data) {
-				next(new NotFoundError('Пользователь с указанным id не зарегистрирован'));
-			}
-			res.send( data );
-		})
-		.catch((err) => {
-			if (err.name === 'CastError') {
-				next(new BadRequestError('Передан некорректный id пользователя'));
 			} else {
 				next(err);
 			}
@@ -161,6 +161,9 @@ const login = (req, res, next) => {
 	const { email, password } = req.body;
 	return User.findUserByCredentials(email, password)
 		.then((user) => {
+			if (!user) {
+				return next(new UnauthorizedError('Ошибка авторизации'));
+			}
 			const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
 			res.status(200).send({token})
 		})
@@ -168,36 +171,24 @@ const login = (req, res, next) => {
 };
 
 // const login = (req, res, next) => {
-// 	const { email, password } = req.body;
-
-// 	return User.findOne({ email })
-// 		.select('+password')
-// 		.then((user) => {
-// 			if (!user) {
-// 				return next(new UnauthorizedError('Ошибка авторизации'));
-// 			}
-// 			return bcrypt.compare(
-// 				password,
-// 				user.password,
-// 				(err, isPasswordMatch) => {
-// 					if (!isPasswordMatch) {
-// 						return next(
-// 							(new UnauthorizedError('Ошибка авторизации')),
-// 						);
-// 					}
-// 					const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
-// 					res
-// 						.cookie('jwt', token, {
-// 							maxAge: 3600000,
-// 							httpOnly: true,
-// 							sameSite: true
-// 						});
-// 						return res.status(200).send( {user} );
-// 				},
-// 			);
-// 		})
-// 		.catch(next);
-// };
+//   const { email, password } = req.body;
+//   User
+//     .findOne({ email })
+//     .select('+password')
+//     .orFail(() => new UnauthorizedError('Ошибка авторизации'))
+//     .then((user) => {
+//       bcrypt
+//         .compare(String(password), user.password)
+//         .then((matched) => {
+//           if (matched) {
+//             const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
+//             return res.status(200).send({ token, message: Успешная авторизация' });
+//           }
+//           return next(new UnauthorizedError('Ошибка авторизации'));
+//         });
+//     })
+//     .catch(next);
+// }
 
 module.exports = {
 	getUsers,

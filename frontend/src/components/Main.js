@@ -39,7 +39,7 @@ export default function Main({
 							onCardDelete={onCardDelete}
 							key={card._id}
 							/>
-					))}
+					)).reverse()}
 				</ul>
 			</section>
 		</main>

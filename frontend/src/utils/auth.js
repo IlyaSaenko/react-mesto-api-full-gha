@@ -8,7 +8,6 @@ export function register(password, email) {
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		credentials: 'include',
 		body: JSON.stringify({ password, email })
 	})
 		.then(checkResponse)
@@ -20,30 +19,29 @@ export function authorize(password, email) {
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		credentials: 'include',
 		body: JSON.stringify({ password, email })
 	})
 		.then(checkResponse)
 };
 
-// export function checkToken(token) {
-// 	return fetch(`${BASE_URL}/users/me`, {
-// 		method: 'GET',
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 			"Authorization": `Bearer ${token}`
-// 		}
-// 	})
-// 		.then(checkResponse)
-// }
-
-export const checkUser = () => {
+export function checkToken(token) {
 	return fetch(`${BASE_URL}/users/me`, {
 		method: 'GET',
 		headers: {
 			"Content-Type": "application/json",
-		},
-		credentials: 'include'
+			"Authorization": `Bearer ${token}`
+		}
 	})
-		.then(checkResponse);
-};
+		.then(checkResponse)
+}
+
+// export const checkUser = () => {
+// 	return fetch(`${BASE_URL}/users/me`, {
+// 		method: 'GET',
+// 		headers: {
+// 			"Content-Type": "application/json",
+// 		},
+// 		credentials: 'include'
+// 	})
+// 		.then(checkResponse);
+// };
