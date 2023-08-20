@@ -1,6 +1,6 @@
 import checkResponse from "./handleResponse"; 
 
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'http://api.react.mesto.nomoredomainsicu.ru';
 
 export function register(password, email) {
 	return fetch(`${BASE_URL}/signup`, {
