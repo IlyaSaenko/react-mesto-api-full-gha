@@ -11,29 +11,30 @@ const helmet = require('helmet');
 const limiter = require('./middlewares/reqLimiter');
 const { createUser, login } = require('./controllers/users');
 const { URL_REGEX } = require('./utils/constants');
-const cors = require("./middlewares/cors");
+// const cors = require("./middlewares/cors");
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
+// const { PORT = 3000 } = process.env;
+const { PORT = process.env.PORT, DB_URL = process.env.DB_ADRESS } = process.env;
+
 const app = express();
-
-// PORT=3000
-// NODE_ENV='production'
-// SUPER_SECRET_KEY = 'fee940487b8c62e965228fbdae6563f6d733f5e101a56129a94c8d4cf8486fa9ac9c39aed429d2f09add8cbd56a284c9eb5ca785e61a7cf6902b0d5b312ab9fb'
-// DB_ADRESS='mongodb://127.0.0.1:27017/mestodb'
-
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(cookieParser());
-// app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
+app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
 
-// app.use(cors({ origin: 'http://localhost:3001', credentials: true}));
-app.use(cors);
+app.use(cors({
+  origin: ["localhost:3000",
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://react.mesto.nomoredomainsicu.ru",
+    "https://react.mesto.nomoredomainsicu.ru"], credentials: true, maxAge: 30
+}));
+// app.use(cors);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -68,6 +69,15 @@ app.get('/crash-test', () => {
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
+
+mongoose
+  .connect(DB_URL)
+  .then(() => {
+    console.log('Подключён с БД');
+  })
+  .catch(() => {
+    console.log('Ошибка подключения БД');
+  });
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
