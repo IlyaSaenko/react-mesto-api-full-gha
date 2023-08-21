@@ -26,7 +26,7 @@ export const initialCards = [
 ];
 
 export const apiConfig = {
-  url: 'http://api.react.mesto.nomoredomainsicu.ru',
+  url: 'https://api.react.mesto.nomoredomainsicu.ru',
   // headers:{
   //   authorization: 'cee8554c-6d1f-4db9-968b-a545ca4ff2da',
   //   'Content-Type': 'application/json'
