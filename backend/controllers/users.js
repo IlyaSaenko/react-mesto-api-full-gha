@@ -157,38 +157,38 @@ const updateAvatar = (req, res, next) => {
 // 		.catch(next);
 // };
 
-const login = (req, res, next) => {
-	const { email, password } = req.body;
-	return User.findUserByCredentials(email, password)
-		.then((user) => {
-			if (!user) {
-				return next(new UnauthorizedError('Ошибка авторизации'));
-			}
-			const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
-			res.status(200).send({token})
-		})
-		.catch(next);
-};
-
 // const login = (req, res, next) => {
-//   const { email, password } = req.body;
-//   User
-//     .findOne({ email })
-//     .select('+password')
-//     .orFail(() => new UnauthorizedError('Ошибка авторизации'))
-//     .then((user) => {
-//       bcrypt
-//         .compare(String(password), user.password)
-//         .then((matched) => {
-//           if (matched) {
-//             const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
-//             return res.status(200).send({ token, message: Успешная авторизация' });
-//           }
-//           return next(new UnauthorizedError('Ошибка авторизации'));
-//         });
-//     })
-//     .catch(next);
-// }
+// 	const { email, password } = req.body;
+// 	return User.findUserByCredentials(email, password)
+// 		.then((user) => {
+// 			if (!user) {
+// 				return next(new UnauthorizedError('Ошибка авторизации'));
+// 			}
+// 			const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
+// 			res.status(200).send({token})
+// 		})
+// 		.catch(next);
+// };
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+  User
+    .findOne({ email })
+    .select('+password')
+    .orFail(() => new UnauthorizedError('Ошибка авторизации'))
+    .then((user) => {
+      bcrypt
+        .compare(String(password), user.password)
+        .then((matched) => {
+          if (matched) {
+            const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
+            return res.status(200).send({ token, message: 'Успешная авторизация' });
+          }
+          return next(new UnauthorizedError('Ошибка авторизации'));
+        });
+    })
+    .catch(next);
+}
 
 module.exports = {
 	getUsers,
