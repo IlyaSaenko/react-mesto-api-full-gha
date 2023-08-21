@@ -31,18 +31,29 @@ export default function App() {
   const [isSuccessRegister, setIsSuccesRegister] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
-  useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-    return Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([user, card]) => {
-        setCurrentUser(user);
-        setCards(card);
-      })
-      .catch((err) =>
-        console.log(err));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("jwt")) {
+  //   return Promise.all([api.getUserInfo(), api.getInitialCards()])
+  //     .then(([user, card]) => {
+  //       setCurrentUser(user);
+  //       setCards(card);
+  //     })
+  //     .catch((err) =>
+  //       console.log(err));
+  //   }
+  // }, []);
 
+  useEffect(() => {
+    loggedIn &&
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([data, initialCards]) => {
+          setCurrentUser(data)
+          setCards(initialCards)
+        })
+        .catch((err) => {
+          alert(err)
+        })
+  }, [loggedIn])
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
