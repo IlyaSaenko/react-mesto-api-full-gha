@@ -28,7 +28,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
   origin: [
+    "localhost:3000",
     "http://localhost:3000",
+    "https://api.react.mesto.nomoredomainsicu.ru",
+    "http://api.react.mesto.nomoredomainsicu.ru",
     "http://react.mesto.nomoredomainsicu.ru",
     "https://react.mesto.nomoredomainsicu.ru"], credentials: true, maxAge: 30 }));
 

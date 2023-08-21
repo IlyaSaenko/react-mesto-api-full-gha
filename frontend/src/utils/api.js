@@ -3,7 +3,7 @@ import checkResponse from "./handleResponse";
 
 class Api {
 	constructor(config) {
-		this._url = config.url;
+		this._url = 'https://api.react.mesto.nomoredomainsicu.ru';
 		// this._headers = config.headers;
 	}
 
