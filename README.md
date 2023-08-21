@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 51.250.85.86
+IP 51.250.85.86
 
 Frontend https://react.mesto.nomoredomainsicu.ru/
 
