@@ -16,9 +16,9 @@ const { URL_REGEX } = require('./utils/constants');
 const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-// const { PORT = 3000 } = process.env;
-const { PORT = process.env.PORT, DB_URL = process.env.DB_ADRESS } = process.env;
-
+const { PORT = 3000 } = process.env;
+// const { PORT = process.env.PORT, DB_URL = process.env.DB_ADRESS } = process.env;
+const DB_URL = process.env.DB_ADRESS;
 const app = express();
 
 app.use(cors({
