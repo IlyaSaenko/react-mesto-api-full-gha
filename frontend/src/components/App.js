@@ -32,13 +32,15 @@ export default function App() {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
+    if (localStorage.getItem("jwt")) {
+    return Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([user, card]) => {
         setCurrentUser(user);
         setCards(card);
       })
       .catch((err) =>
         console.log(err));
+    }
   }, []);
 
 
@@ -89,14 +91,14 @@ export default function App() {
   }
 
   function handleCardLike(card) {
-     // Снова проверяем, есть ли уже лайк на этой карточке
+    // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked)
-    .then((newCard) => {
-      setCards((state) =>
-        state.map((c) => (c._id === card._id ? newCard : c))
-      );
-    })
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
       .catch((err) => console.log("Error like card " + err));
   }
 
@@ -129,7 +131,7 @@ export default function App() {
   function handleAddPlaceSubmit(value) {
     api.addNewCards(value)
       .then((newCard) => {
-        setCards([ ...cards, newCard]);
+        setCards([...cards, newCard]);
         closeAllPopups();
       })
       .catch((err) => console.log("Error add card: " + err))
