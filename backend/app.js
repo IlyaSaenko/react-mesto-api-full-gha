@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const auth = require('./middlewares/auth');
@@ -21,6 +21,12 @@ const { PORT = process.env.PORT, DB_URL = process.env.DB_ADRESS } = process.env;
 
 const app = express();
 
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "http://react.mesto.nomoredomainsicu.ru",
+    "https://react.mesto.nomoredomainsicu.ru"], credentials: true, maxAge: 30 }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(cookieParser());
@@ -28,13 +34,7 @@ app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
 
-app.use(cors({
-  origin: ["localhost:3000",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://react.mesto.nomoredomainsicu.ru",
-    "https://react.mesto.nomoredomainsicu.ru"], credentials: true, maxAge: 30
-}));
+
 // app.use(cors);
 
 app.post('/signup', celebrate({
