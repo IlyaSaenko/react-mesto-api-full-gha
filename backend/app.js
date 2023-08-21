@@ -21,21 +21,33 @@ const { PORT = 3000 } = process.env;
 const DB_URL = process.env.DB_ADRESS;
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cors({
   origin: [
     "http://localhost:3000",
     "http://react.mesto.nomoredomainsicu.ru",
     "https://react.mesto.nomoredomainsicu.ru"], credentials: true, maxAge: 30 }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(cookieParser());
 app.use(helmet());
-app.use(limiter);
+
+mongoose
+  .connect(DB_URL)
+  .then(() => {
+    console.log('Подключён с БД');
+  })
+  .catch(() => {
+    console.log('Ошибка подключения БД');
+  });
+// app.use(cors);
+
 app.use(requestLogger);
 
-
-// app.use(cors);
+app.use(limiter);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -70,15 +82,6 @@ app.get('/crash-test', () => {
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
-
-mongoose
-  .connect(DB_URL)
-  .then(() => {
-    console.log('Подключён с БД');
-  })
-  .catch(() => {
-    console.log('Ошибка подключения БД');
-  });
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
