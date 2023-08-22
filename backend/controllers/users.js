@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { SUPER_SECRET_KEY } = require('../utils/constants');
+const { SUPER_SECRET_KEY } = require('../utils/secretKey');
 console.log(jwt);
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');

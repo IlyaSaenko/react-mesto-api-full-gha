@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { SUPER_SECRET_KEY } = require('../utils/constants');
+const { SUPER_SECRET_KEY } = require('../utils/secretKey');
 const UnauthorizedError = require('../errors/unauthorizedError');
 
 module.exports = (req, res, next) => {
@@ -12,50 +12,9 @@ module.exports = (req, res, next) => {
   let payload;
   try {
     payload = jwt.verify(token, SUPER_SECRET_KEY);
-    // payload = jwt.verify(token, 'very-secret-key');
-    // console.log('success payload:', payload);
   } catch (err) {
     return next(new UnauthorizedError('Неправильные почта или пароль'));
   }
   req.user = payload;
   return next();
 };
-
-// module.exports = (req, res, next) => {
-//   const { authorization } = req.headers;
-//   const bearer = 'Bearer ';
-
-//   if (!authorization || !authorization.startsWith(bearer)) {
-//     return next(new UnauthorizedError('Неправильные почта или пароль'));
-//   }
-
-//   const token = authorization.replace(bearer, '');
-//   let payload;
-
-//   try {
-//     payload = jwt.verify(token, SUPER_SECRET_KEY);
-//   } catch (err) {
-//     return next(new UnauthorizedError('Неправильные почта или пароль'));
-//   }
-
-//   req.user = payload;
-
-//   return next();
-// };
-
-// module.exports = (req, res, next) => {
-//   if (!req.cookies.jwt) {
-//     throw new UnauthorizedError('Неправильные почта или пароль');
-//   }
-//   const token = req.cookies.jwt;
-//   let payload;
-//   try {
-//     payload = jwt.verify(token, SUPER_SECRET_KEY);
-//   } catch (err) {
-//     throw new UnauthorizedError('Неправильные почта или пароль');
-//   }
-
-//   req.user = payload;
-
-//   return next();
-// };
