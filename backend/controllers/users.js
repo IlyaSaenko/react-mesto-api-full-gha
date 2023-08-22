@@ -54,9 +54,9 @@ const createUser = (req, res, next) => {
 		name, about, avatar, email, password,
 	} = req.body;
 
-	if (!email || !password) {
-		next(new BadRequestError('Не передан электронный адрес или пароль'));
-	}
+	// if (!email || !password) {
+	// 	next(new BadRequestError('Не передан электронный адрес или пароль'));
+	// }
 	bcrypt.hash(req.body.password, 10)
 		.then((hash) => User.create({
 			name,
@@ -137,38 +137,6 @@ const updateAvatar = (req, res, next) => {
 			}
 		});
 };
-
-// const login = (req, res, next) => {
-// 	const { email, password } = req.body;
-// 	return User.findUserByCredentials(email, password)
-// 		.then((user) => {
-// 			if (!email || !password) {
-// 				next(new UnauthorizedError('Ошибка авторизации'));
-// 			}
-// 			const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
-// 			return res
-// 				.cookie('jwt', token, {
-// 					maxAge: 3600000,
-// 					httpOnly: true,
-// 					sameSite: true
-// 				})
-// 				.send({ message: 'Успешная авторизация' });
-// 		})
-// 		.catch(next);
-// };
-
-// const login = (req, res, next) => {
-// 	const { email, password } = req.body;
-// 	return User.findUserByCredentials(email, password)
-// 		.then((user) => {
-// 			if (!user) {
-// 				return next(new UnauthorizedError('Ошибка авторизации'));
-// 			}
-// 			const token = jwt.sign({ _id: user._id }, SUPER_SECRET_KEY, { expiresIn: '7d' });
-// 			res.status(200).send({token})
-// 		})
-// 		.catch(next);
-// };
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
