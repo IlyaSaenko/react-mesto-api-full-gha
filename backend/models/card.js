@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { URL_REGEX } = require("../utils/constants");
+const mongoose = require('mongoose');
+const { URL_REGEX } = require('../utils/constants');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -7,7 +7,7 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: ({ length }) => length >= 2 && length <= 30,
-      message: "Имя карточки должно быть длиной от 2 до 30 символов",
+      message: 'Имя карточки должно быть длиной от 2 до 30 символов',
     },
   },
 
@@ -16,20 +16,20 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (link) => URL_REGEX.test(link),
-      message: "Требуется ввести корректный URL",
+      message: 'Требуется ввести корректный URL',
     },
   },
 
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true,
   },
 
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
       default: [],
     },
   ],
@@ -40,4 +40,4 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("card", cardSchema);
+module.exports = mongoose.model('card', cardSchema);
