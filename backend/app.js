@@ -1,24 +1,25 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
+/* eslint-disable no-console */
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 // const cookieParser = require('cookie-parser');
-const { celebrate, Joi } = require('celebrate');
-const { errors } = require('celebrate');
-const auth = require('./middlewares/auth');
-const NotFoundError = require('./errors/notFoundError');
-const { errorHandler } = require('./middlewares/errorHandler');
-const helmet = require('helmet');
-const limiter = require('./middlewares/reqLimiter');
-const { createUser, login } = require('./controllers/users');
-const { URL_REGEX } = require('./utils/constants');
+const { celebrate, Joi } = require("celebrate");
+const { errors } = require("celebrate");
+const helmet = require("helmet");
+const cors = require("cors");
+const auth = require("./middlewares/auth");
+const NotFoundError = require("./errors/notFoundError");
+const { errorHandler } = require("./middlewares/errorHandler");
+const limiter = require("./middlewares/reqLimiter");
+const { createUser, login } = require("./controllers/users");
+const { URL_REGEX } = require("./utils/constants");
 // const cors = require("./middlewares/cors");
-const cors = require('cors');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const { PORT = 3000 } = process.env;
 // const { PORT = process.env.PORT, DB_URL = process.env.DB_ADRESS } = process.env;
-const DB_URL = 'mongodb://127.0.0.1:27017/mestodb';
+const DB_URL = "mongodb://127.0.0.1:27017/mestodb";
 const app = express();
 
 app.use(express.json());
@@ -33,7 +34,10 @@ app.use(cors({
     "https://api.react.mesto.nomoredomainsicu.ru",
     "http://api.react.mesto.nomoredomainsicu.ru",
     "http://react.mesto.nomoredomainsicu.ru",
-    "https://react.mesto.nomoredomainsicu.ru"], credentials: true, maxAge: 30 }));
+    "https://react.mesto.nomoredomainsicu.ru"],
+  credentials: true,
+  maxAge: 30,
+}));
 
 // app.use(cookieParser());
 app.use(helmet());
@@ -41,10 +45,10 @@ app.use(helmet());
 mongoose
   .connect(DB_URL)
   .then(() => {
-    console.log('Подключён с БД');
+    console.log("Подключён с БД");
   })
   .catch(() => {
-    console.log('Ошибка подключения БД');
+    console.log("Ошибка подключения БД");
   });
 // app.use(cors);
 
@@ -52,13 +56,13 @@ app.use(requestLogger);
 
 app.use(limiter);
 
-app.get('/crash-test', () => {
+app.get("/crash-test", () => {
   setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
+    throw new Error("Сервер сейчас упадёт");
   }, 0);
-})
+});
 
-app.post('/signup', celebrate({
+app.post("/signup", celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(20),
@@ -68,7 +72,7 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.post('/signin', celebrate({
+app.post("/signin", celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
@@ -77,10 +81,10 @@ app.post('/signin', celebrate({
 
 app.use(auth);
 
-app.use('/users', require('./routes/users'));
-app.use('/cards', require('./routes/cards'));
+app.use("/users", require("./routes/users"));
+app.use("/cards", require("./routes/cards"));
 
-app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
+app.use((req, res, next) => next(new NotFoundError("Страница не найдена")));
 
 app.use(errorLogger);
 app.use(errors());

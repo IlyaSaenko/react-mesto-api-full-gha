@@ -8,6 +8,8 @@
                     "_id"
                 ]
             }
-        ]
+        ],
+        "semi": ["error", "always"],
+        "quotes": ["error", "double"]
     }
 }
