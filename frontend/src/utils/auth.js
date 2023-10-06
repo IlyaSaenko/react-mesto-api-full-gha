@@ -34,14 +34,3 @@ export function checkToken() {
 	})
 		.then(checkResponse)
 }
-
-// export const checkUser = () => {
-// 	return fetch(`${BASE_URL}/users/me`, {
-// 		method: 'GET',
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 		},
-// 		credentials: 'include'
-// 	})
-// 		.then(checkResponse);
-// };

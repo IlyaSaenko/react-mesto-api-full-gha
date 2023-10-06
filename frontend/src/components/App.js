@@ -31,18 +31,6 @@ export default function App() {
   const [isSuccessRegister, setIsSuccesRegister] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("jwt")) {
-  //   return Promise.all([api.getUserInfo(), api.getInitialCards()])
-  //     .then(([user, card]) => {
-  //       setCurrentUser(user);
-  //       setCards(card);
-  //     })
-  //     .catch((err) =>
-  //       console.log(err));
-  //   }
-  // }, []);
-
   useEffect(() => {
     loggedIn &&
       Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -102,7 +90,6 @@ export default function App() {
   }
 
   function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
@@ -158,8 +145,6 @@ export default function App() {
     localStorage.setItem("email", email);
     setLoggedIn(true);
   }
-
-  //при нажатии на кнопку
 
   function handleAuth(password, email) {
     auth
@@ -253,7 +238,6 @@ export default function App() {
             }
           />
         </Routes>
-        {/* <Footer /> */}
         {loggedIn && <Footer />}
 
         <EditProfilePopup

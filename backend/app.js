@@ -1,9 +1,7 @@
-/* eslint-disable no-console */
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const cookieParser = require('cookie-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
@@ -14,11 +12,9 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const limiter = require('./middlewares/reqLimiter');
 const { createUser, login } = require('./controllers/users');
 const { URL_REGEX } = require('./utils/constants');
-// const cors = require("./middlewares/cors");
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
-// const { PORT = process.env.PORT, DB_URL = process.env.DB_ADRESS } = process.env;
 const DB_URL = 'mongodb://127.0.0.1:27017/mestodb';
 const app = express();
 
@@ -39,7 +35,6 @@ app.use(cors({
   maxAge: 30,
 }));
 
-// app.use(cookieParser());
 app.use(helmet());
 
 mongoose
@@ -50,7 +45,6 @@ mongoose
   .catch(() => {
     console.log('Ошибка подключения БД');
   });
-// app.use(cors);
 
 app.use(requestLogger);
 
